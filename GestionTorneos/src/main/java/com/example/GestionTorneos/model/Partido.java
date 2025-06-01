@@ -16,9 +16,18 @@ public class Partido {
     @JoinColumn(name = "equipo_visitante_id")
     private Equipo equipoVisitante;
 
+    @ManyToOne
+    @JoinColumn(name = "torneo_id")
+    private Torneo torneo;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Estadistica estadisticas;
+
     private LocalDate fecha;
 
     private String resultado;
+
+    private boolean jugado;
 
     public Partido() {
     }
@@ -52,5 +61,23 @@ public class Partido {
     }
     public void setResultado(String resultado) {
         this.resultado = resultado;
+    }
+    public Torneo getTorneo() {
+        return torneo;
+    }
+    public void setTorneo(Torneo torneo) {
+        this.torneo = torneo;
+    }
+    public Estadistica getEstadisticas() {
+        return estadisticas;
+    }
+    public void setEstadisticas(Estadistica estadisticas) {
+        this.estadisticas = estadisticas;
+    }
+    public boolean isJugado() {
+        return jugado;
+    }
+    public void setJugado(boolean jugado) {
+        this.jugado = jugado;
     }
 }

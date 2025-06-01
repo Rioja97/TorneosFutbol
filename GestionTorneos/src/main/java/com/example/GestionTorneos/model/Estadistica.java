@@ -12,7 +12,8 @@ public class Estadistica {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Map<Jugador, Integer>;
+    @Min(0)
+    private int goles;
 
     @Min(0)
     private int asistencias;
@@ -26,10 +27,6 @@ public class Estadistica {
     @ManyToOne
     @JoinColumn(name = "jugador_id", nullable = true)
     private Jugador jugador;
-
-    @ManyToOne
-    @JoinColumn(name = "equipo_id", nullable = true)
-    private Equipo equipo;
 
     @ManyToOne
     @JoinColumn(name = "partido_id", nullable = false)
@@ -73,12 +70,6 @@ public class Estadistica {
     }
     public void setJugador(Jugador jugador) {
         this.jugador = jugador;
-    }
-    public Equipo getEquipo() {
-        return equipo;
-    }
-    public void setEquipo(Equipo equipo) {
-        this.equipo = equipo;
     }
     public Partido getPartido() {
         return partido;

@@ -27,6 +27,9 @@ public class Torneo {
     )
     private List<Equipo> equiposParticipantes;
 
+    @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL)
+    private List<Partido> partidos;
+
     private String ubicacion;
 
     public Torneo() {
@@ -61,5 +64,11 @@ public class Torneo {
     }
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
+    }
+    public List<Partido> getPartidos() {
+        return partidos;
+    }
+    public void setPartidos(List<Partido> partidos) {
+        this.partidos = partidos;
     }
 }
