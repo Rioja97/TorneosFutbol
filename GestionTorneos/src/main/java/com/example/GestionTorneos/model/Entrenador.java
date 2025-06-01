@@ -25,32 +25,26 @@ public class Entrenador {
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
     public String getNombre() {
         return nombre;
     }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
     public int getExperiencia() {
         return experiencia;
     }
-
     public void setExperiencia(int experiencia) {
         this.experiencia = experiencia;
     }
-
     public Equipo getEquipo() {
         return equipo;
     }
-
     public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
     }
+
 }

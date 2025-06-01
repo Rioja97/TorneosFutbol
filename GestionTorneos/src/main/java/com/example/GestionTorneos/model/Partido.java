@@ -20,42 +20,36 @@ public class Partido {
 
     private String resultado;
 
+    public Partido() {
+    }
+
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
     public Equipo getEquipoLocal() {
         return equipoLocal;
     }
-
     public void setEquipoLocal(Equipo equipoLocal) {
         this.equipoLocal = equipoLocal;
     }
-
     public Equipo getEquipoVisitante() {
         return equipoVisitante;
     }
-
     public void setEquipoVisitante(Equipo equipoVisitante) {
         this.equipoVisitante = equipoVisitante;
     }
-
     public LocalDate getFecha() {
         return fecha;
     }
-
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
-
     public String getResultado() {
         return resultado;
     }
-
     public void setResultado(String resultado) {
         this.resultado = resultado;
     }
