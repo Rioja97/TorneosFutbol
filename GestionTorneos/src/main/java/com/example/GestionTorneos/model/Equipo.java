@@ -10,10 +10,12 @@ public class Equipo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotNull
     @Size(min = 2, max = 100)
     @Column(nullable = false)
     private String nombre;
+
     @NotNull
     @Size(min = 2, max = 100)
     @Column(nullable = false)
@@ -26,44 +28,46 @@ public class Equipo {
     @JoinColumn(name = "entrenador_id", referencedColumnName = "id")
     private Entrenador entrenador;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Estadio estadio;
+
+    public Equipo() {
+    }
 
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
     public String getNombre() {
         return nombre;
     }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
     public String getCiudad() {
         return ciudad;
     }
-
     public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
     }
-
     public List<Jugador> getJugadores() {
         return jugadores;
     }
-
     public void setJugadores(List<Jugador> jugadores) {
         this.jugadores = jugadores;
     }
-
     public Entrenador getEntrenador() {
         return entrenador;
     }
-
     public void setEntrenador(Entrenador entrenador) {
         this.entrenador = entrenador;
+    }
+    public Estadio getEstadio() {
+        return estadio;
+    }
+    public void setEstadio(Estadio estadio) {
+        this.estadio = estadio;
     }
 }
