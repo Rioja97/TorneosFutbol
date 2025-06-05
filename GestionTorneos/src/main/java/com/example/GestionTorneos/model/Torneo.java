@@ -27,46 +27,48 @@ public class Torneo {
     )
     private List<Equipo> equiposParticipantes;
 
+    @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL)
+    private List<Partido> partidos;
+
     private String ubicacion;
 
+    public Torneo() {
+    }
 
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
     public String getNombre() {
         return nombre;
     }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
     public String getCategoria() {
         return categoria;
     }
-
     public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
-
     public List<Equipo> getEquiposParticipantes() {
         return equiposParticipantes;
     }
-
     public void setEquiposParticipantes(List<Equipo> equiposParticipantes) {
         this.equiposParticipantes = equiposParticipantes;
     }
-
     public String getUbicacion() {
         return ubicacion;
     }
-
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
+    }
+    public List<Partido> getPartidos() {
+        return partidos;
+    }
+    public void setPartidos(List<Partido> partidos) {
+        this.partidos = partidos;
     }
 }
