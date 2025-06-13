@@ -1,6 +1,8 @@
-package main.java.com.example.GestionTorneos.controller;
-import com.example.proyectofinal.model.Jugador;
-import com.example.proyectofinal.repository.JugadorRepository;
+package com.example.GestionTorneos.controller;
+
+import com.example.GestionTorneos.model.Jugador;
+import com.example.GestionTorneos.repository.JugadorRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,10 +28,23 @@ public class JugadorController {
                 .orElse(ResponseEntity.notFound().build());
     }
     @PostMapping
-    public ResponseEntity<Jugador> crear(@RequestBody Jugador jugador){
+    public ResponseEntity<Jugador> crear(@RequestBody @Valid Jugador jugador){
         Jugador guardado = jugadorRepository.save(jugador);
         return ResponseEntity.ok(guardado);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Jugador> actualizar(@PathVariable Long id, @RequestBody @Valid Jugador datosActualizados) {
+        return jugadorRepository.findById(id).map(jugadorExistente -> {
+            jugadorExistente.setNombre(datosActualizados.getNombre());
+            jugadorExistente.setEdad(datosActualizados.getEdad());
+            jugadorExistente.setPosicion(datosActualizados.getPosicion());
+            jugadorExistente.setDorsal(datosActualizados.getDorsal());
+            jugadorExistente.setEquipo(datosActualizados.getEquipo());
+            return ResponseEntity.ok(jugadorRepository.save(jugadorExistente));
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?>eliminar(@PathVariable Long id){
         if(jugadorRepository.existsById(id)){
