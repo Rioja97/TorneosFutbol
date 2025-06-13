@@ -28,6 +28,17 @@ public class EquipoController {
         Equipo guardado = equipoRepository.save(equipo);
         return ResponseEntity.ok(guardado);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<Equipo> actualizar(@PathVariable Long id, @RequestBody @Valid Equipo datosActualizados) {
+        return equipoRepository.findById(id).map(equipoExistente -> {
+            equipoExistente.setNombre(datosActualizados.getNombre());
+            equipoExistente.setCiudad(datosActualizados.getCiudad());
+            equipoExistente.setEntrenador(datosActualizados.getEntrenador());
+            equipoExistente.setJugadores(datosActualizados.getJugadores());
+            return ResponseEntity.ok(equipoRepository.save(equipoExistente));
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminar(@PathVariable Long id) {
