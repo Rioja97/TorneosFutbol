@@ -1,53 +1,59 @@
 package com.example.GestionTorneos.controller;
+
 import com.example.GestionTorneos.model.Equipo;
-import com.example.GestionTorneos.repository.EquipoRepository;
+import com.example.GestionTorneos.service.EquipoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/equipos")
 public class EquipoController {
+
     @Autowired
-    private EquipoRepository equipoRepository;
+    private EquipoService equipoService;
+
     @GetMapping
     public List<Equipo> listar() {
-        return equipoRepository.findAll();
+        return equipoService.listarTodos();
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Equipo>  buscarPorId(@PathVariable Long id) {
-        Optional<Equipo> equipo = equipoRepository.findById(id);
-        return equipo.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-    @PostMapping
-    public ResponseEntity<Equipo> crear(@RequestBody @Valid Equipo equipo) {
-        Equipo guardado = equipoRepository.save(equipo);
-        return ResponseEntity.ok(guardado);
-    }
-    @PutMapping("/{id}")
-    public ResponseEntity<Equipo> actualizar(@PathVariable Long id, @RequestBody @Valid Equipo datosActualizados) {
-        return equipoRepository.findById(id).map(equipoExistente -> {
-            equipoExistente.setNombre(datosActualizados.getNombre());
-            equipoExistente.setCiudad(datosActualizados.getCiudad());
-            equipoExistente.setEntrenador(datosActualizados.getEntrenador());
-            equipoExistente.setJugadores(datosActualizados.getJugadores());
-            return ResponseEntity.ok(equipoRepository.save(equipoExistente));
-        }).orElse(ResponseEntity.notFound().build());
-    }
-
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id) {
-        if (equipoRepository.existsById(id)) {
-            equipoRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } else {
+    public ResponseEntity<Equipo> buscarPorId(@PathVariable Long id) {
+        try {
+            Equipo equipo = equipoService.buscarPorId(id);
+            return ResponseEntity.ok(equipo);
+        } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
+    @PostMapping
+    public ResponseEntity<Equipo> crear(@RequestBody @Valid Equipo equipo) {
+        Equipo nuevoEquipo = equipoService.crear(equipo);
+        return ResponseEntity.ok(nuevoEquipo);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Equipo> actualizar(@PathVariable Long id, @RequestBody @Valid Equipo datosActualizados) {
+        try {
+            Equipo equipoActualizado = equipoService.actualizar(id, datosActualizados);
+            return ResponseEntity.ok(equipoActualizado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+        try {
+            equipoService.eliminar(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
