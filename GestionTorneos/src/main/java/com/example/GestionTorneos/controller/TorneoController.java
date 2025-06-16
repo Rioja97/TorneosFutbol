@@ -1,8 +1,10 @@
-package main.java.com.example.GestionTorneos.controller;
-import com.example.proyectofinal.model.Torneo;
-import com.example.proyectofinal.repository.TorneoRepository;
+package com.example.GestionTorneos.controller;
+import com.example.GestionTorneos.model.Torneo;
+import com.example.GestionTorneos.repository.TorneoRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,4 +26,25 @@ public class TorneoController {
     public Torneo crear(@RequestBody Torneo torneo) {
         return torneoRepository.save(torneo);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<Torneo> actualizar(@PathVariable Long id, @RequestBody @Valid Torneo datosActualizados) {
+        return torneoRepository.findById(id).map(torneoExistente -> {
+            torneoExistente.setNombre(datosActualizados.getNombre());
+            torneoExistente.setCategoria(datosActualizados.getCategoria());
+            torneoExistente.setEquiposParticipantes(datosActualizados.getEquiposParticipantes());
+            torneoExistente.setUbicacion(datosActualizados.getUbicacion());
+            return ResponseEntity.ok(torneoRepository.save(torneoExistente));
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+        if (torneoRepository.existsById(id)) {
+            torneoRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
