@@ -46,7 +46,6 @@ public class EstadisticaController {
             estadisticaActual.setTarjetasAmarillas(datosActualizados.getTarjetasAmarillas());
             estadisticaActual.setTarjetasRojas(datosActualizados.getTarjetasRojas());
             estadisticaActual.setJugador(datosActualizados.getJugador());
-            estadisticaActual.setEquipo(datosActualizados.getEquipo());
             estadisticaActual.setPartido(datosActualizados.getPartido());
 
             Estadistica estadisticaActualizada = estadisticaService.crear(estadisticaActual);
