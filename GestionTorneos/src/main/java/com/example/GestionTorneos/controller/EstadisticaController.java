@@ -4,6 +4,7 @@ import com.example.GestionTorneos.model.Estadistica;
 import com.example.GestionTorneos.service.EstadisticaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +35,7 @@ public class EstadisticaController {
     @PostMapping
     public ResponseEntity<Estadistica> crear(@RequestBody @Valid Estadistica estadistica) {
         Estadistica nuevaEstadistica = estadisticaService.crear(estadistica);
-        return ResponseEntity.ok(nuevaEstadistica);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevaEstadistica);
     }
 
     @PutMapping("/{id}")

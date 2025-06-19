@@ -4,6 +4,7 @@ import com.example.GestionTorneos.model.Equipo;
 import com.example.GestionTorneos.service.EquipoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +35,7 @@ public class EquipoController {
     @PostMapping
     public ResponseEntity<Equipo> crear(@RequestBody @Valid Equipo equipo) {
         Equipo nuevoEquipo = equipoService.crear(equipo);
-        return ResponseEntity.ok(nuevoEquipo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoEquipo);
     }
 
     @PutMapping("/{id}")

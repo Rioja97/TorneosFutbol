@@ -3,6 +3,7 @@ import com.example.GestionTorneos.model.Partido;
 import com.example.GestionTorneos.service.PartidoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,7 @@ public class PartidoController {
     @PostMapping
     public ResponseEntity<Partido> crear(@RequestBody @Valid Partido partido) {
         Partido nuevoPartido = partidoService.crear(partido);
-        return ResponseEntity.ok(nuevoPartido);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPartido);
     }
 
     @PutMapping("/{id}")
