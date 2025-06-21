@@ -1,5 +1,6 @@
 package com.example.GestionTorneos.model;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -29,6 +30,10 @@ public class Torneo {
 
     @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL)
     private List<Partido> partidos;
+
+    @NotNull
+    @Size(min = 5, max = 20)
+    private Integer cupo;
 
     private String ubicacion;
 
@@ -70,5 +75,11 @@ public class Torneo {
     }
     public void setPartidos(List<Partido> partidos) {
         this.partidos = partidos;
+    }
+    public @NotNull @Size(min = 5, max = 20) Integer getCupo() {
+        return cupo;
+    }
+    public void setCupo(@NotNull @Size(min = 5, max = 20) Integer cupo) {
+        this.cupo = cupo;
     }
 }
