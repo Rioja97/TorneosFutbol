@@ -1,10 +1,19 @@
 package com.example.GestionTorneos.service;
+import com.example.GestionTorneos.dto.EstadisticaJugadorDTO;
+import com.example.GestionTorneos.dto.ResultadoPartidoDTO;
+import com.example.GestionTorneos.excepcion.EntidadNoEncontradaException;
+import com.example.GestionTorneos.model.Estadistica;
+import com.example.GestionTorneos.model.Jugador;
 import com.example.GestionTorneos.model.Partido;
+import com.example.GestionTorneos.repository.JugadorRepository;
 import com.example.GestionTorneos.repository.PartidoRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -12,6 +21,7 @@ public class PartidoService {
 
     @Autowired
     private PartidoRepository partidoRepository;
+    private JugadorRepository jugadorRepository;
 
     public List<Partido> listarTodos() {
         return partidoRepository.findAll();
@@ -68,6 +78,7 @@ public class PartidoService {
         }
     }
 
+
     private void validarLogicaNegocioActualizacion(Partido actualizado, Partido existente) {
         if (actualizado.getEquipoLocal().getId().equals(actualizado.getEquipoVisitante().getId())) {
             throw new IllegalArgumentException("El equipo local y visitante no pueden ser el mismo.");
@@ -88,5 +99,39 @@ public class PartidoService {
             throw new IllegalArgumentException("Uno de los equipos ya tiene un partido en esa fecha.");
         }
     }
+
+    @Transactional
+    public void registrarResultadoYEstadisticas(Long partidoId, ResultadoPartidoDTO dto) {
+        Partido partido = partidoRepository.findById(partidoId)
+                .orElseThrow(() -> new EntidadNoEncontradaException("Partido no encontrado"));
+
+        if (partido.isJugado()) {
+            throw new IllegalStateException("El partido ya fue jugado.");
+        }
+
+        List<Estadistica> estadisticas = new ArrayList<>();
+
+        for (EstadisticaJugadorDTO estDto : dto.getEstadisticasJugadores()) {
+            Jugador jugador = jugadorRepository.findById(estDto.getJugadorId())
+                    .orElseThrow(() -> new EntityNotFoundException("Jugador no encontrado"));
+
+            Estadistica estadistica = new Estadistica();
+            estadistica.setPartido(partido);
+            estadistica.setJugador(jugador);
+            estadistica.setGoles(estDto.getGoles());
+            estadistica.setAsistencias(estDto.getAsistencias());
+            estadistica.setTarjetasAmarillas(estDto.getTarjetasAmarillas());
+            estadistica.setTarjetasRojas(estDto.getTarjetasRojas());
+
+            estadisticas.add(estadistica);
+        }
+
+        partido.setResultado(dto.getResultado());
+        partido.setJugado(true);
+        partido.setEstadisticas(estadisticas);
+
+        partidoRepository.save(partido); // gracias al cascade, se guardan también las estadísticas
+    }
+
 }
 

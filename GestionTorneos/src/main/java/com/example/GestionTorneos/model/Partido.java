@@ -1,6 +1,7 @@
 package com.example.GestionTorneos.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Partido {
@@ -20,8 +21,8 @@ public class Partido {
     @JoinColumn(name = "torneo_id")
     private Torneo torneo;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Estadistica estadisticas;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Estadistica> estadisticas;
 
     private LocalDate fecha;
 
@@ -68,10 +69,10 @@ public class Partido {
     public void setTorneo(Torneo torneo) {
         this.torneo = torneo;
     }
-    public Estadistica getEstadisticas() {
+    public List<Estadistica> getEstadisticas() {
         return estadisticas;
     }
-    public void setEstadisticas(Estadistica estadisticas) {
+    public void setEstadisticas(List<Estadistica> estadisticas) {
         this.estadisticas = estadisticas;
     }
     public boolean isJugado() {

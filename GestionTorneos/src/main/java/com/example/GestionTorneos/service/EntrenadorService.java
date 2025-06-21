@@ -1,5 +1,7 @@
 package com.example.GestionTorneos.service;
 
+import com.example.GestionTorneos.excepcion.EntidadNoEncontradaException;
+import com.example.GestionTorneos.excepcion.ValorPositivoException;
 import com.example.GestionTorneos.model.Entrenador;
 import com.example.GestionTorneos.repository.EntrenadorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,10 @@ public class EntrenadorService {
 
     public Entrenador buscarPorId(Long id) {
         if (id == null || id <= 0) {
-            throw new IllegalArgumentException("El ID debe ser un valor positivo.");
+            throw new ValorPositivoException("El ID debe ser un valor positivo.");
         }
         return entrenadorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Entrenador no encontrado con id: " + id));
+                .orElseThrow(() -> new EntidadNoEncontradaException("Entrenador no encontrado con id: " + id));
     }
 
     public Entrenador crear(Entrenador entrenador) {

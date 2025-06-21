@@ -35,8 +35,6 @@ public class Torneo {
     @Size(min = 5, max = 20)
     private Integer cupo;
 
-    private String ubicacion;
-
     public Torneo() {
     }
 
@@ -63,12 +61,6 @@ public class Torneo {
     }
     public void setEquiposParticipantes(List<Equipo> equiposParticipantes) {
         this.equiposParticipantes = equiposParticipantes;
-    }
-    public String getUbicacion() {
-        return ubicacion;
-    }
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
     }
     public List<Partido> getPartidos() {
         return partidos;

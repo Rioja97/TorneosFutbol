@@ -53,33 +53,25 @@ public class EquipoService {
     }
 
     private void validarEquipo(Equipo equipo) {
-        if (equipo == null) {
-            throw new IllegalArgumentException("El equipo no puede ser nulo.");
-        }
+        if (equipo == null) throw new IllegalArgumentException("El equipo no puede ser nulo.");
 
-        if (equipo.getNombre() == null || equipo.getNombre().trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre del equipo es obligatorio.");
-        }
+        if (equipo.getNombre() == null || equipo.getNombre().trim().isEmpty()) throw new IllegalArgumentException("El nombre del equipo es obligatorio.");
 
-        if (equipo.getCiudad() == null || equipo.getCiudad().trim().isEmpty()) {
-            throw new IllegalArgumentException("La ciudad del equipo es obligatoria.");
-        }
+        if (equipo.getCiudad() == null || equipo.getCiudad().trim().isEmpty()) throw new IllegalArgumentException("La ciudad del equipo es obligatoria.");
 
         boolean existeEquipoDuplicado = equipoRepository.existsByNombreIgnoreCaseAndCiudadIgnoreCase(
                 equipo.getNombre(), equipo.getCiudad());
-        if (existeEquipoDuplicado) {
-            throw new IllegalArgumentException("Ya existe un equipo con ese nombre en esa ciudad.");
-        }
+
+        if (existeEquipoDuplicado) throw new IllegalArgumentException("Ya existe un equipo con ese nombre en esa ciudad.");
 
         if (equipo.getJugadores() != null) {
-            for (Jugador jugador : equipo.getJugadores()) {
-                if (jugador.getId() != null) {
-                    boolean jugadorConEquipo = jugadorRepository.existsByIdAndEquipoIsNotNull(jugador.getId());
-                    if (jugadorConEquipo) {
+            equipo.getJugadores().stream()
+                    .filter(jugador -> jugador.getId() != null)
+                    .filter(jugador -> jugadorRepository.existsByIdAndEquipoIsNotNull(jugador.getId()))
+                    .findFirst()
+                    .ifPresent(jugador -> {
                         throw new IllegalArgumentException("El jugador " + jugador.getNombre() + " ya pertenece a otro equipo.");
-                    }
-                }
-            }
+                    });
         }
     }
 }

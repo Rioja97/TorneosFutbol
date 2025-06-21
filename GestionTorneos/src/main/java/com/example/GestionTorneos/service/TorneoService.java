@@ -1,5 +1,8 @@
 package com.example.GestionTorneos.service;
 
+import com.example.GestionTorneos.excepcion.CupoMaximoException;
+import com.example.GestionTorneos.excepcion.EntidadRepetidaException;
+import com.example.GestionTorneos.excepcion.NoNuloException;
 import com.example.GestionTorneos.model.Equipo;
 import com.example.GestionTorneos.model.Torneo;
 import com.example.GestionTorneos.repository.TorneoRepository;
@@ -40,7 +43,6 @@ public class TorneoService {
 
         existente.setNombre(datosActualizados.getNombre());
         existente.setCategoria(datosActualizados.getCategoria());
-        existente.setUbicacion(datosActualizados.getUbicacion());
         existente.setEquiposParticipantes(datosActualizados.getEquiposParticipantes());
         existente.setCupo(datosActualizados.getCupo());
 
@@ -55,16 +57,16 @@ public class TorneoService {
     private void validarLogicaNegocioCreacion(Torneo torneo) {
         if (torneo.getCupo() != null && torneo.getEquiposParticipantes() != null &&
                 torneo.getEquiposParticipantes().size() > torneo.getCupo()) {
-            throw new IllegalArgumentException("El número de equipos excede el cupo permitido.");
+            throw new CupoMaximoException("El número de equipos excede el cupo permitido.");
         }
 
         if (torneoRepository.existsByNombreAndCategoria(
                 torneo.getNombre(), torneo.getCategoria())) {
-            throw new IllegalArgumentException("Ya existe un torneo con ese nombre y categoría.");
+            throw new EntidadRepetidaException("Ya existe un torneo con ese nombre y categoría.");
         }
 
         if (torneo.getEquiposParticipantes() == null) {
-            throw new IllegalArgumentException("La lista de equipos participantes no puede ser nula.");
+            throw new NoNuloException("La lista de equipos participantes no puede ser nula.");
         }
 
         Set<Long> idsUnicos = torneo.getEquiposParticipantes().stream()
@@ -72,18 +74,18 @@ public class TorneoService {
                 .collect(Collectors.toSet());
 
         if (idsUnicos.size() != torneo.getEquiposParticipantes().size()) {
-            throw new IllegalArgumentException("No puede haber equipos duplicados en el torneo.");
+            throw new EntidadRepetidaException("No puede haber equipos duplicados en el torneo.");
         }
     }
 
     private void validarLogicaNegocioActualizacion(Torneo actualizado, Torneo existente) {
         if (actualizado.getEquiposParticipantes() == null) {
-            throw new IllegalArgumentException("La lista de equipos participantes no puede ser nula.");
+            throw new NoNuloException("La lista de equipos participantes no puede ser nula.");
         }
 
         if (actualizado.getCupo() != null &&
                 actualizado.getEquiposParticipantes().size() > actualizado.getCupo()) {
-            throw new IllegalArgumentException("La cantidad de equipos supera el nuevo cupo.");
+            throw new CupoMaximoException("La cantidad de equipos supera el nuevo cupo.");
         }
 
         Set<Long> idsUnicos = actualizado.getEquiposParticipantes().stream()
@@ -91,7 +93,7 @@ public class TorneoService {
                 .collect(Collectors.toSet());
 
         if (idsUnicos.size() != actualizado.getEquiposParticipantes().size()) {
-            throw new IllegalArgumentException("No puede haber equipos duplicados en el torneo.");
+            throw new EntidadRepetidaException("No puede haber equipos duplicados en el torneo.");
         }
     }
 }

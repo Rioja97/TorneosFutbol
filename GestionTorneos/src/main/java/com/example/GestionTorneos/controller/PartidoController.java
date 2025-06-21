@@ -1,4 +1,5 @@
 package com.example.GestionTorneos.controller;
+import com.example.GestionTorneos.dto.ResultadoPartidoDTO;
 import com.example.GestionTorneos.model.Partido;
 import com.example.GestionTorneos.service.PartidoService;
 import jakarta.validation.Valid;
@@ -23,12 +24,7 @@ public class PartidoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Partido> buscarPorId(@PathVariable Long id) {
-        try {
-            Partido partido = partidoService.buscarPorId(id);
-            return ResponseEntity.ok(partido);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(partidoService.buscarPorId(id));
     }
 
     @PostMapping
@@ -39,21 +35,19 @@ public class PartidoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Partido> actualizar(@PathVariable Long id, @RequestBody @Valid Partido datosActualizados) {
-        try {
-            Partido partidoActualizado = partidoService.actualizar(id, datosActualizados);
-            return ResponseEntity.ok(partidoActualizado);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(partidoService.actualizar(id, datosActualizados));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id) {
-        try {
-            partidoService.eliminar(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public void eliminar(@PathVariable Long id) {
+        Partido partido = partidoService.buscarPorId(id);
+        partidoService.eliminar(id);
+    }
+
+    @PutMapping("/{id}/resultado")
+    public ResponseEntity<?> registrarResultado(@PathVariable Long id, @RequestBody ResultadoPartidoDTO dto) {
+
+        partidoService.registrarResultadoYEstadisticas(id, dto);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,5 +1,7 @@
 package com.example.GestionTorneos.service;
 
+import com.example.GestionTorneos.excepcion.EntidadNoEncontradaException;
+import com.example.GestionTorneos.excepcion.EntidadRepetidaException;
 import com.example.GestionTorneos.model.Jugador;
 import com.example.GestionTorneos.repository.JugadorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ public class JugadorService {
         }
 
         return jugadorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Jugador no encontrado con id: " + id));
+                .orElseThrow(() -> new EntidadNoEncontradaException("Jugador no encontrado con id: " + id));
     }
 
     public Jugador crear(Jugador jugador) {
@@ -59,7 +61,7 @@ public class JugadorService {
                 jugador.getEquipo().getId(),
                 jugador.getDorsal()
         )) {
-            throw new IllegalArgumentException("Ya existe un jugador con ese dorsal en el equipo.");
+            throw new EntidadRepetidaException("Ya existe un jugador con ese dorsal en el equipo.");
         }
     }
 
@@ -75,7 +77,7 @@ public class JugadorService {
         );
 
         if (dorsalOcupado) {
-            throw new IllegalArgumentException("Ya existe otro jugador con ese dorsal en el equipo.");
+            throw new EntidadRepetidaException("Ya existe otro jugador con ese dorsal en el equipo.");
         }
     }
 

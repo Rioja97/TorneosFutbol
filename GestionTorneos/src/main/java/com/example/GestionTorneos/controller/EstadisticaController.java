@@ -2,9 +2,6 @@ package com.example.GestionTorneos.controller;
 
 import com.example.GestionTorneos.model.Estadistica;
 import com.example.GestionTorneos.service.EstadisticaService;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,55 +11,23 @@ import java.util.List;
 @RequestMapping("/estadisticas")
 public class EstadisticaController {
 
-    @Autowired
-    private EstadisticaService estadisticaService;
+    private final EstadisticaService estadisticaService;
 
-    @GetMapping
-    public List<Estadistica> listarTodas() {
-        return estadisticaService.listarTodas();
+    public EstadisticaController(EstadisticaService estadisticaService) {
+        this.estadisticaService = estadisticaService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Estadistica> buscarPorId(@PathVariable Long id) {
-        try {
-            Estadistica estadistica = estadisticaService.buscarPorId(id);
-            return ResponseEntity.ok(estadistica);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    // Obtener TODAS las estadísticas de un jugador
+    @GetMapping("/jugador/{jugadorId}")
+    public ResponseEntity<List<Estadistica>> obtenerPorJugador(@PathVariable Long jugadorId) {
+        return ResponseEntity.ok(estadisticaService.obtenerPorJugador(jugadorId));
     }
 
-    @PostMapping
-    public ResponseEntity<Estadistica> crear(@RequestBody @Valid Estadistica estadistica) {
-        Estadistica nuevaEstadistica = estadisticaService.crear(estadistica);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevaEstadistica);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Estadistica> actualizar(@PathVariable Long id, @RequestBody @Valid Estadistica datosActualizados) {
-        try {
-            Estadistica estadisticaActual = estadisticaService.buscarPorId(id);
-            estadisticaActual.setGoles(datosActualizados.getGoles());
-            estadisticaActual.setAsistencias(datosActualizados.getAsistencias());
-            estadisticaActual.setTarjetasAmarillas(datosActualizados.getTarjetasAmarillas());
-            estadisticaActual.setTarjetasRojas(datosActualizados.getTarjetasRojas());
-            estadisticaActual.setJugador(datosActualizados.getJugador());
-            estadisticaActual.setPartido(datosActualizados.getPartido());
-
-            Estadistica estadisticaActualizada = estadisticaService.crear(estadisticaActual);
-            return ResponseEntity.ok(estadisticaActualizada);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id) {
-        try {
-            estadisticaService.eliminar(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    // Obtener estadísticas de un jugador en un torneo específico
+    @GetMapping("/jugador/{jugadorId}/torneo/{torneoId}")
+    public ResponseEntity<List<Estadistica>> obtenerPorJugadorYTorneo(
+            @PathVariable Long jugadorId,
+            @PathVariable Long torneoId) {
+        return ResponseEntity.ok(estadisticaService.obtenerPorJugadorYTorneo(jugadorId, torneoId));
     }
 }

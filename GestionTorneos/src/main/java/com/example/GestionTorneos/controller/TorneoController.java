@@ -18,18 +18,13 @@ public class TorneoController {
     private TorneoService torneoService;
 
     @GetMapping
-    public List<Torneo> listar() {
-        return torneoService.listarTodos();
+    public ResponseEntity<List<Torneo>> listar() {
+        return ResponseEntity.ok(torneoService.listarTodos());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Torneo> buscarPorId(@PathVariable Long id) {
-        try {
-            Torneo torneo = torneoService.buscarPorId(id);
-            return ResponseEntity.ok(torneo);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(torneoService.buscarPorId(id));
     }
 
     @PostMapping
@@ -40,21 +35,12 @@ public class TorneoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Torneo> actualizar(@PathVariable Long id, @RequestBody @Valid Torneo datosActualizados) {
-        try {
-            Torneo torneoActualizado = torneoService.actualizar(id, datosActualizados);
-            return ResponseEntity.ok(torneoActualizado);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(torneoService.actualizar(id, datosActualizados));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id) {
-        try {
-            torneoService.eliminar(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public void eliminar(@PathVariable Long id) {
+        Torneo torneo = torneoService.buscarPorId(id);
+        torneoService.eliminar(id);
     }
 }

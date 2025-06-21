@@ -18,18 +18,13 @@ public class EntrenadorController {
     private EntrenadorService entrenadorService;
 
     @GetMapping
-    public List<Entrenador> listarTodos() {
-        return entrenadorService.listarTodos();
+    public ResponseEntity<List<Entrenador>> listarTodos() {
+        return ResponseEntity.ok(entrenadorService.listarTodos());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Entrenador> buscarPorId(@PathVariable Long id) {
-        try {
-            Entrenador entrenador = entrenadorService.buscarPorId(id);
-            return ResponseEntity.ok(entrenador);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(entrenadorService.buscarPorId(id));
     }
 
     @PostMapping
@@ -40,21 +35,12 @@ public class EntrenadorController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Entrenador> actualizar(@PathVariable Long id, @RequestBody @Valid Entrenador datosActualizados) {
-        try {
-            Entrenador entrenadorActualizado = entrenadorService.actualizar(id, datosActualizados);
-            return ResponseEntity.ok(entrenadorActualizado);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(entrenadorService.actualizar(id, datosActualizados));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id) {
-        try {
-            entrenadorService.eliminar(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public void eliminar(@PathVariable Long id) {
+        Entrenador entrenador = entrenadorService.buscarPorId(id);
+        entrenadorService.eliminar(id);
     }
 }

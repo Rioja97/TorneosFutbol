@@ -18,18 +18,13 @@ public class JugadorController {
     private JugadorService jugadorService;
 
     @GetMapping
-    public List<Jugador> listarTodos() {
-        return jugadorService.listarTodos();
+    public ResponseEntity<List<Jugador>> listarTodos() {
+        return ResponseEntity.ok(jugadorService.listarTodos());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Jugador> buscarPorId(@PathVariable Long id) {
-        try {
-            Jugador jugador = jugadorService.buscarPorId(id);
-            return ResponseEntity.ok(jugador);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(jugadorService.buscarPorId(id));
     }
 
     @PostMapping
@@ -40,21 +35,12 @@ public class JugadorController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Jugador> actualizar(@PathVariable Long id, @RequestBody @Valid Jugador datosActualizados) {
-        try {
-            Jugador jugadorActualizado = jugadorService.actualizar(id, datosActualizados);
-            return ResponseEntity.ok(jugadorActualizado);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(jugadorService.actualizar(id, datosActualizados));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id) {
-        try {
-            jugadorService.eliminar(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public void eliminar(@PathVariable Long id) {
+        Jugador jugador =  jugadorService.buscarPorId(id);
+        jugadorService.eliminar(id);
     }
 }

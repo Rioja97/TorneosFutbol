@@ -2,7 +2,6 @@ package com.example.GestionTorneos.service;
 
 import com.example.GestionTorneos.model.Estadistica;
 import com.example.GestionTorneos.repository.EstadisticaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,24 +9,17 @@ import java.util.List;
 @Service
 public class EstadisticaService {
 
-    @Autowired
-    private EstadisticaRepository estadisticaRepository;
+    private final EstadisticaRepository estadisticaRepository;
 
-    public List<Estadistica> listarTodas() {
-        return estadisticaRepository.findAll();
+    public EstadisticaService(EstadisticaRepository estadisticaRepository) {
+        this.estadisticaRepository = estadisticaRepository;
     }
 
-    public Estadistica buscarPorId(Long id) {
-        return estadisticaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Estadística no encontrada con id: " + id));
+    public List<Estadistica> obtenerPorJugador(Long jugadorId) {
+        return estadisticaRepository.findByJugadorId(jugadorId);
     }
 
-    public Estadistica crear(Estadistica estadistica) {
-        return estadisticaRepository.save(estadistica);
-    }
-
-    public void eliminar(Long id) {
-        Estadistica existente = buscarPorId(id);
-        estadisticaRepository.delete(existente);
+    public List<Estadistica> obtenerPorJugadorYTorneo(Long jugadorId, Long torneoId) {
+        return estadisticaRepository.findByJugadorIdAndPartido_Torneo_Id(jugadorId, torneoId);
     }
 }
