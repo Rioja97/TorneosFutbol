@@ -43,4 +43,18 @@ public class TorneoController {
         Torneo torneo = torneoService.buscarPorId(id);
         torneoService.eliminar(id);
     }
+
+    @DeleteMapping("/{idTorneo}/equipos/{idEquipo}")
+    public ResponseEntity<Torneo> eliminarEquipo(@PathVariable Long idTorneo, @PathVariable Long idEquipo) {
+        Torneo torneoActualizado = torneoService.eliminarEquipoDeTorneo(idTorneo, idEquipo);
+        return ResponseEntity.ok(torneoActualizado);
+    }
+
+    @PostMapping("/torneos/{idTorneo}/equipos")
+    public ResponseEntity<Torneo> agregarEquipos(@PathVariable Long idTorneo, @RequestBody List<Long> idsEquipos) {
+        Torneo torneoActualizado = torneoService.agregarEquiposAlTorneo(idTorneo, idsEquipos);
+        return ResponseEntity.ok(torneoActualizado);
+    }
+
+
 }

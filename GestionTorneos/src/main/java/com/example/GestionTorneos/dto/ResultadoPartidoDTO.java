@@ -12,15 +12,12 @@ public class ResultadoPartidoDTO {
     public String getResultado() {
         return resultado;
     }
-
     public void setResultado(String resultado) {
         this.resultado = resultado;
     }
-
     public List<EstadisticaJugadorDTO> getEstadisticasJugadores() {
         return estadisticasJugadores;
     }
-
     public void setEstadisticasJugadores(List<EstadisticaJugadorDTO> estadisticasJugadores) {
         this.estadisticasJugadores = estadisticasJugadores;
     }

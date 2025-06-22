@@ -1,5 +1,7 @@
 package com.example.GestionTorneos.model;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -25,7 +27,8 @@ public class Jugador {
 
     @NotNull
     @Column(nullable = false)
-    @Size(min = 2, max = 100)
+    @Min(value = 1)
+    @Max(value = 99)
     private int dorsal;
 
     @ManyToOne

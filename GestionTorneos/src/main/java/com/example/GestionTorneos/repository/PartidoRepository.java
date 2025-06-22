@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 public interface PartidoRepository extends JpaRepository<Partido, Long> {
 
@@ -25,4 +26,19 @@ public interface PartidoRepository extends JpaRepository<Partido, Long> {
     boolean existsByFechaAndEquiposExcluyendoId(@Param("fecha") LocalDate fecha,
                                                 @Param("equipoLocalId") Long equipoLocalId,
                                                 @Param("equipoVisitanteId") Long equipoVisitanteId,
-                                                @Param("partidoId") Long partidoId);}
+                                                @Param("partidoId") Long partidoId);
+
+    @Query("""
+    SELECT p FROM Partido p
+    JOIN FETCH p.equipoLocal
+    JOIN FETCH p.equipoVisitante
+    JOIN FETCH p.torneo
+    LEFT JOIN FETCH p.estadisticas e
+    LEFT JOIN FETCH e.jugador
+    WHERE p.id = :id
+    """)
+    Optional<Partido> findByIdConTodo(@Param("id") Long id);
+
+
+}
+

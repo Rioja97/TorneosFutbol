@@ -28,16 +28,19 @@ public class PartidoService {
     }
 
     public Partido buscarPorId(Long id) {
-        if (id == null || id <= 0) {
-            throw new IllegalArgumentException("El ID debe ser un valor positivo.");
-        }
-
-        return partidoRepository.findById(id)
+        return partidoRepository.findByIdConTodo(id)
                 .orElseThrow(() -> new RuntimeException("Partido no encontrado con id: " + id));
     }
 
+
+    @Transactional
     public Partido crear(Partido partido) {
-        validarLogicaNegocioCreacion(partido);
+        if (partido.getEstadisticas() != null) {
+            for (Estadistica e : partido.getEstadisticas()) {
+                e.setPartido(partido); // ← clave
+            }
+        }
+
         return partidoRepository.save(partido);
     }
 

@@ -1,4 +1,5 @@
 package com.example.GestionTorneos.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -22,10 +23,12 @@ public class Equipo {
     private String ciudad;
 
     @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Jugador> jugadores;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "entrenador_id", referencedColumnName = "id")
+    @JsonIgnore
     private Entrenador entrenador;
 
     @OneToOne(cascade = CascadeType.ALL)

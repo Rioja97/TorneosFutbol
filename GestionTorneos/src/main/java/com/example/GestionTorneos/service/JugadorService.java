@@ -30,6 +30,7 @@ public class JugadorService {
 
     public Jugador crear(Jugador jugador) {
         validarLogicaNegocioCreacion(jugador);
+        jugador.setEquipo(jugador.getEquipo());
         return jugadorRepository.save(jugador);
     }
 

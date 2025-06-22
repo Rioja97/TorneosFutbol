@@ -1,5 +1,6 @@
 package com.example.GestionTorneos.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -21,6 +22,7 @@ public class Estadio {
     private int capacidad;
 
     @OneToOne(mappedBy = "estadio")
+    @JsonIgnore
     private Equipo equipo;
 
     public Estadio() {

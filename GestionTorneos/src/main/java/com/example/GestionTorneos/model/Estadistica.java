@@ -1,7 +1,10 @@
 package com.example.GestionTorneos.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 
 import java.util.Map;
 
@@ -30,6 +33,7 @@ public class Estadistica {
 
     @ManyToOne
     @JoinColumn(name = "partido_id", nullable = false)
+    @JsonIgnore
     private Partido partido;
 
     public Estadistica() {

@@ -37,14 +37,13 @@ public class EquipoService {
     }
 
     public Equipo actualizar(Long id, Equipo datosActualizados) {
+        Equipo equipoExistente = equipoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Equipo no encontrado"));
         validarEquipo(datosActualizados);
 
-        Equipo existente = buscarPorId(id);
-        existente.setNombre(datosActualizados.getNombre());
-        existente.setCiudad(datosActualizados.getCiudad());
-        existente.setJugadores(datosActualizados.getJugadores());
-        existente.setEntrenador(datosActualizados.getEntrenador());
-        return equipoRepository.save(existente);
+        equipoExistente.setNombre(datosActualizados.getNombre());
+        equipoExistente.setCiudad(datosActualizados.getCiudad());
+        return equipoRepository.save(equipoExistente);
     }
 
     public void eliminar(Long id) {
@@ -62,7 +61,7 @@ public class EquipoService {
         boolean existeEquipoDuplicado = equipoRepository.existsByNombreIgnoreCaseAndCiudadIgnoreCase(
                 equipo.getNombre(), equipo.getCiudad());
 
-        if (existeEquipoDuplicado) throw new IllegalArgumentException("Ya existe un equipo con ese nombre en esa ciudad.");
+        //if (existeEquipoDuplicado) throw new IllegalArgumentException("Ya existe un equipo con ese nombre en esa ciudad.");
 
         if (equipo.getJugadores() != null) {
             equipo.getJugadores().stream()

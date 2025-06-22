@@ -1,5 +1,7 @@
 package com.example.GestionTorneos.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -29,10 +31,12 @@ public class Torneo {
     private List<Equipo> equiposParticipantes;
 
     @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Partido> partidos;
 
     @NotNull
-    @Size(min = 5, max = 20)
+    @Min(4)
+    @Max(30)
     private Integer cupo;
 
     public Torneo() {
@@ -68,10 +72,10 @@ public class Torneo {
     public void setPartidos(List<Partido> partidos) {
         this.partidos = partidos;
     }
-    public @NotNull @Size(min = 5, max = 20) Integer getCupo() {
+    public @NotNull @Min(4) @Max(30) Integer getCupo() {
         return cupo;
     }
-    public void setCupo(@NotNull @Size(min = 5, max = 20) Integer cupo) {
+    public void setCupo(@NotNull @Min(4) @Max(30) Integer cupo) {
         this.cupo = cupo;
     }
 }
