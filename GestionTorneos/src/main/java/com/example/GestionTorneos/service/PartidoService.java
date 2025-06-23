@@ -87,9 +87,6 @@ public class PartidoService {
             throw new IllegalArgumentException("El equipo local y visitante no pueden ser el mismo.");
         }
 
-        if (actualizado.getResultado() != null && existente.getFecha().isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("No se puede asignar un resultado a un partido que aún no se jugó.");
-        }
 
         boolean yaJuegaEseDia = partidoRepository.existsByFechaAndEquiposExcluyendoId(
                 actualizado.getFecha(),
