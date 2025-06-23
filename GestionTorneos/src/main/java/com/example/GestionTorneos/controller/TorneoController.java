@@ -1,5 +1,6 @@
 package com.example.GestionTorneos.controller;
 
+import com.example.GestionTorneos.model.Partido;
 import com.example.GestionTorneos.model.Torneo;
 import com.example.GestionTorneos.service.TorneoService;
 import jakarta.validation.Valid;
@@ -44,16 +45,32 @@ public class TorneoController {
         torneoService.eliminar(id);
     }
 
-    @DeleteMapping("/{idTorneo}/equipos/{idEquipo}")
+    @DeleteMapping("/{idTorneo}/equipo/{idEquipo}")
     public ResponseEntity<Torneo> eliminarEquipo(@PathVariable Long idTorneo, @PathVariable Long idEquipo) {
         Torneo torneoActualizado = torneoService.eliminarEquipoDeTorneo(idTorneo, idEquipo);
         return ResponseEntity.ok(torneoActualizado);
     }
 
-    @PostMapping("/torneos/{idTorneo}/equipos")
+    @PostMapping("/{idTorneo}/equipo")
     public ResponseEntity<Torneo> agregarEquipos(@PathVariable Long idTorneo, @RequestBody List<Long> idsEquipos) {
         Torneo torneoActualizado = torneoService.agregarEquiposAlTorneo(idTorneo, idsEquipos);
         return ResponseEntity.ok(torneoActualizado);
+    }
+
+    @PostMapping("/{idTorneo}/partido")
+    public ResponseEntity<List<Partido>> agregarPartidosAlTorneo(
+            @PathVariable Long idTorneo,
+            @RequestBody List<Long> idPartidos
+    ) {
+        List<Partido> partidosAgregados = torneoService.agregarPartidos(idTorneo, idPartidos);
+        return ResponseEntity.ok(partidosAgregados);
+    }
+
+
+    @DeleteMapping("/{idTorneo}/partido/{idPartido}")
+    public ResponseEntity<Partido> eliminarPartido(@PathVariable Long idTorneo, @PathVariable Long idPartido) {
+        torneoService.eliminarPartidoDeTorneo(idTorneo, idPartido);
+        return ResponseEntity.ok(new Partido());
     }
 
 

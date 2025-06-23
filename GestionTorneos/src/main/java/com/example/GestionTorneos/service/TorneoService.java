@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,6 +25,7 @@ public class TorneoService {
     private TorneoRepository torneoRepository;
     @Autowired
     private EquipoRepository equipoRepository;
+    @Autowired
     private PartidoService partidoService;
 
     public List<Torneo> listarTodos() {
@@ -168,18 +170,25 @@ public class TorneoService {
     }
 
     @Transactional
-    public Partido agregarPartido(Long idTorneo, Partido partido) {
+    public List<Partido> agregarPartidos(Long idTorneo, List<Long> idPartidos) {
         Torneo torneo = torneoRepository.findById(idTorneo)
                 .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
 
-        partido.setTorneo(torneo); // si Partido tiene una relación con Torneo
-        Partido partidoGuardado = partidoService.crear(partido);
+        List<Partido> partidosAgregados = new ArrayList<>();
 
-        torneo.getPartidos().add(partidoGuardado);
-        torneoRepository.save(torneo); // opcional si usás cascade
+        for (Long idPartido : idPartidos) {
+            Partido partido = partidoService.buscarPorId(idPartido);
+            partido.setTorneo(torneo);
+            Partido partidoGuardado = partidoService.crear(partido);
+            partidosAgregados.add(partidoGuardado);
+        }
 
-        return partidoGuardado;
+        torneo.getPartidos().addAll(partidosAgregados);
+        torneoRepository.save(torneo); // opcional si usás CascadeType.ALL en partidos
+
+        return partidosAgregados;
     }
+
 
     @Transactional
     public void eliminarPartidoDeTorneo(Long idTorneo, Long idPartido) {
