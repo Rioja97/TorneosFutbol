@@ -42,6 +42,12 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
+    //  Jugador sin estadisticas
+    @ExceptionHandler(SinEstadisticasException.class)
+    public ResponseEntity<?> handleValorPositivo(SinEstadisticasException ex) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
     //  Excepción genérica
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception ex) {

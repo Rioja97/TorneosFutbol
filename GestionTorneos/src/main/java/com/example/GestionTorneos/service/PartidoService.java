@@ -2,6 +2,7 @@ package com.example.GestionTorneos.service;
 import com.example.GestionTorneos.dto.EstadisticaJugadorDTO;
 import com.example.GestionTorneos.dto.ResultadoPartidoDTO;
 import com.example.GestionTorneos.excepcion.EntidadNoEncontradaException;
+import com.example.GestionTorneos.excepcion.NoNuloException;
 import com.example.GestionTorneos.model.Estadistica;
 import com.example.GestionTorneos.model.Jugador;
 import com.example.GestionTorneos.model.Partido;
@@ -130,7 +131,7 @@ public class PartidoService {
         partido.setJugado(true);
         partido.setEstadisticas(estadisticas);
 
-        partidoRepository.save(partido); // gracias al cascade, se guardan también las estadísticas
+        partidoRepository.save(partido);
     }
 
 }
