@@ -73,5 +73,10 @@ public class TorneoController {
         return ResponseEntity.ok(new Partido());
     }
 
+    @GetMapping("/{idTorneo}/partido")
+    public ResponseEntity<List<Partido>> listarPartidosDeTorneo(@PathVariable Long idTorneo) {
+        List<Partido> partidos = torneoService.listarPartidosDeTorneo(idTorneo);
+        return ResponseEntity.ok(partidos);
+    }
 
 }

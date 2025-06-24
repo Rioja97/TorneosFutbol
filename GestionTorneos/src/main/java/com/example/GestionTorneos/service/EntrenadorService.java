@@ -47,9 +47,6 @@ public class EntrenadorService {
         return entrenadorRepository.save(entrenador);
     }
 
-
-
-
     public Entrenador actualizar(Long id, Entrenador datosActualizados) {
         Entrenador existente = buscarPorId(id);
 
