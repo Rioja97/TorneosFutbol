@@ -7,11 +7,11 @@ import com.example.GestionTorneos.model.Equipo;
 import com.example.GestionTorneos.model.Partido;
 import com.example.GestionTorneos.model.Torneo;
 import com.example.GestionTorneos.repository.EquipoRepository;
-import com.example.GestionTorneos.repository.PartidoRepository;
 import com.example.GestionTorneos.repository.TorneoRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -203,6 +203,14 @@ public class TorneoService {
 
         torneo.getPartidos().remove(partido);
         partidoService.eliminar(idPartido);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Partido> listarPartidosDeTorneo(Long idTorneo) {
+        Torneo torneo = torneoRepository.findById(idTorneo)
+                .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
+
+        return new ArrayList<>(torneo.getPartidos());
     }
 
 }
